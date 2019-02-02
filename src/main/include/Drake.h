@@ -12,6 +12,8 @@
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
 #include "DalekDrive.h"
+#include "MicroLidar.h"
+#include "DalekShuffleboard.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -26,4 +28,6 @@ private:
   DalekDrive *m_drive;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
+  MicroLidar *microLidar;
+  DalekShuffleboard *dalekShuffleboard;
 };

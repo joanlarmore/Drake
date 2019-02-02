@@ -15,6 +15,8 @@ Robot::RobotInit()
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
     m_leftStick = new frc::Joystick(1);
     m_rightStick = new frc::Joystick(2);
+    microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::SINGLE_MEASURE_MODE);
+    dalekShuffleboard = new DalekShuffleboard(microLidar);
 }
 
 void
