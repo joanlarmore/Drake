@@ -101,7 +101,7 @@ DalekDrive::TankDrive(GenericHID* leftStick, GenericHID* rightStick,
              bool squaredInputs)
 {
 	if(m_type == DalekDrive::driveType::kDifferential)
-		m_diffdrive->TankDrive(leftStick->GetY(), rightStick->GetY(), squaredInputs);
+		m_diffdrive->TankDrive(leftStick->GetY() * 0.25, rightStick->GetY() * 0.25, squaredInputs);
 	else {
 		// note mecanum wheels aren't really meant to run this way but can.  As such
 		// it's not supported by the MecanumDrive class, so hacked up tank drive
@@ -188,7 +188,7 @@ void
 DalekDrive::Polar(frc::GenericHID* leftStick, frc::GenericHID* rightStick)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DrivePolar(leftStick->GetY(), rightStick->GetY(), rightStick->GetX());
+		m_mecanum->DrivePolar(rightStick->GetY() *0.25, rightStick->GetX() * 0.25, leftStick->GetY() * 0.25);
 	}
 }
 
@@ -213,7 +213,7 @@ DalekDrive::Cartesian(frc::GenericHID* leftStick, frc::GenericHID* rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(leftStick->GetY(), rightStick->GetY(), rightStick->GetX(),
+		m_mecanum->DriveCartesian(leftStick->GetY() * 0.25, rightStick->GetY() * 0.25, rightStick->GetX() * 0.25,
 			gyroAngle);
 	}
 }
@@ -269,7 +269,7 @@ DalekDrive::InitDalekDrive(void)
 	m_leftMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[FRONT]->SetRampRate(RAMP_RATE);
-	m_leftMotor[FRONT]->SetInverted(false);
+	m_leftMotor[FRONT]->SetInverted(true);
 
     m_rightMotor[FRONT]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
@@ -281,7 +281,7 @@ DalekDrive::InitDalekDrive(void)
   	m_leftMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[REAR]->SetRampRate(RAMP_RATE);
-	m_leftMotor[REAR]->SetInverted(false);
+	m_leftMotor[REAR]->SetInverted(true);
 
     m_rightMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);

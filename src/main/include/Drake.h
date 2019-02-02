@@ -11,9 +11,8 @@
 #include <frc/WPILib.h>
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "DalekDrive.h"
-
-#define Ryan 33;
 
 class Robot : public frc::TimedRobot {
  public:
