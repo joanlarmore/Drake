@@ -8,9 +8,10 @@
 #pragma once
 
 #include <string>
-
-#include <frc/TimedRobot.h>
-#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/WPILib.h>
+#include <rev/CANSparkMax.h>
+#include <ctre/Phoenix.h>
+#include "DalekDrive.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -21,10 +22,8 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
-
- private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
+private:
+  DalekDrive *m_drive;
+  frc::Joystick *m_leftStick;
+  frc::Joystick *m_rightStick;
 };
