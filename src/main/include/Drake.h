@@ -13,6 +13,8 @@
 #include <ctre/Phoenix.h>
 #include "DalekDrive.h"
 
+#define Joan 22
+
 class Robot : public frc::TimedRobot {
  public:
   void RobotInit() override;
