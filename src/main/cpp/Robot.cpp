@@ -44,11 +44,8 @@ Robot::TeleopPeriodic()
 {
     // pick one to test, all should in principle work for the mecanum wheels
     //m_drive->TankDrive(m_leftStick, m_rightStick);
-    m_drive->Polar(m_leftStick, m_rightStick);
-    //m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
-
-    //frc::SmartDashboard::PutData("Left Joystick: ", m_leftStick);
-    //frc::SmartDashboard::PutData("Right Joystick ", m_rightStick);
+    //m_drive->Polar(m_leftStick, m_rightStick);
+    m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
 }
 
 void

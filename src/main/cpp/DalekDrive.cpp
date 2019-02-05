@@ -188,7 +188,7 @@ void
 DalekDrive::Polar(frc::GenericHID* leftStick, frc::GenericHID* rightStick)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DrivePolar(rightStick->GetY() *0.25, rightStick->GetX() * 0.25, leftStick->GetY() * 0.25);
+		m_mecanum->DrivePolar(rightStick->GetY(), rightStick->GetX(), leftStick->GetY());
 	}
 }
 
@@ -213,7 +213,7 @@ DalekDrive::Cartesian(frc::GenericHID* leftStick, frc::GenericHID* rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(leftStick->GetY() * 0.25, rightStick->GetY() * 0.25, rightStick->GetX() * 0.25,
+		m_mecanum->DriveCartesian(rightStick->GetX(), rightStick->GetY(), leftStick->GetY(),
 			gyroAngle);
 	}
 }
@@ -223,7 +223,7 @@ DalekDrive::Cartesian(frc::GenericHID& leftStick, frc::GenericHID& rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(leftStick.GetY(), rightStick.GetY(), rightStick.GetX(),
+		m_mecanum->DriveCartesian(rightStick.GetX(), rightStick.GetY(), leftStick.GetY(),
 			gyroAngle);
 	}
 }
