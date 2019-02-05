@@ -2,13 +2,15 @@
 
 #include <frc/WPILib.h>
 #include <MicroLidar.h>
+#include <LineSensor.h>
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "frc/shuffleboard/Shuffleboard.h"
+
 
 class DalekShuffleboard
 {
 public:
-    DalekShuffleboard(MicroLidar *microLidar);
+    DalekShuffleboard(MicroLidar *microLidar, LineSensor *lineSensor);
     ~DalekShuffleboard();
     
     bool calibrateLidar;
@@ -18,5 +20,6 @@ public:
     void continious();
 private:
     MicroLidar *microLidar;
+    LineSensor *lineSensor;
 };
 

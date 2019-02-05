@@ -1,7 +1,8 @@
 #include "DalekShuffleboard.h"
 
-DalekShuffleboard::DalekShuffleboard(MicroLidar *microLidar) {
+DalekShuffleboard::DalekShuffleboard(MicroLidar *microLidar, LineSensor *lineSensor) {
     this->microLidar = microLidar;
+    this->lineSensor = lineSensor;
     init();
 }
 DalekShuffleboard::~DalekShuffleboard() {
@@ -33,11 +34,12 @@ void DalekShuffleboard::continious() {
             }
         }
     }
-
     frc::SmartDashboard::PutNumber("Lidar Sensor: 0", microLidar->GetMeasurement(0));
     frc::SmartDashboard::PutNumber("Lidar Sensor: 1", microLidar->GetMeasurement(1));
     frc::SmartDashboard::PutNumber("Lidar Sensor: 2", microLidar->GetMeasurement(2));
     frc::SmartDashboard::PutNumber("Lidar Sensor: 3", microLidar->GetMeasurement(3));
     frc::SmartDashboard::PutNumber("Lidar Sensor: 4", microLidar->GetMeasurement(4));
     frc::SmartDashboard::PutNumber("Lidar Sensor: 5", microLidar->GetMeasurement(5));
+    
+    frc::SmartDashboard::PutBoolean("Line Sensor: 0", lineSensor->getLineSensor(0));
 }

@@ -16,12 +16,14 @@ Robot::RobotInit()
     m_leftStick = new frc::Joystick(1);
     m_rightStick = new frc::Joystick(2);
     microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::SINGLE_MEASURE_MODE);
-    dalekShuffleboard = new DalekShuffleboard(microLidar);
+    lineSensor = new LineSensor();
+    dalekShuffleboard = new DalekShuffleboard(microLidar, lineSensor);
 }
 
 void
 Robot::RobotPeriodic() 
 {
+    dalekShuffleboard->continious();
 }
 
 void
