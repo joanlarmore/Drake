@@ -34,12 +34,14 @@ void DalekShuffleboard::continious() {
             }
         }
     }
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 0", microLidar->GetMeasurement(0));
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 1", microLidar->GetMeasurement(1));
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 2", microLidar->GetMeasurement(2));
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 3", microLidar->GetMeasurement(3));
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 4", microLidar->GetMeasurement(4));
-    frc::SmartDashboard::PutNumber("Lidar Sensor: 5", microLidar->GetMeasurement(5));
+
+    for (int i = 0; i < LIDAR_COUNT; i++) {
+        std::string temp = "Lidar Sensor: " + std::to_string(i);
+        frc::SmartDashboard::PutNumber(temp, microLidar->GetMeasurement(i));
+    }
     
-    frc::SmartDashboard::PutBoolean("Line Sensor: 0", lineSensor->getLineSensor(0));
+    for (int i = 0; i < LINE_SENSOR_COUNT; i++) {
+        std::string temp = "Line Sensor: "+ std::to_string(i);
+        frc::SmartDashboard::PutBoolean(temp, lineSensor->getLineSensor(i));
+    }
 }
