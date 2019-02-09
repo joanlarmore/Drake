@@ -5,7 +5,25 @@
 #include "frc/DigitalOutput.h"
 
 #define MAX_MICROLIDAR_DEVICE_COUNT 20
+
+#define CALIBRATION_DISTANCE_MM 200
+
 #define LIDAR_COUNT 6
+
+/*
+ * Example
+ * // Initialization
+ * MicroLidar *pMicroLidar = new MicroLidar("/dev/i2c-2", MicroLidar::MeasurementMode::CONTINUOUS_MEASURE_MODE);
+ * pMicroLidar->Add(0);
+ * pMicroLidar->InitSensors();
+ * 
+ * // Polling mechanism, intended to run asynchronously
+ * pMicroLidar->PollDevices();
+ * 
+ * // Get a measurement
+ * printf("%d\n", pMicroLidar->GetMeasurement(0));
+ * 
+ */
 class MicroLidar
 {
 public:
@@ -15,17 +33,20 @@ public:
     MicroLidar(std::string I2C_Bus, MeasurementMode MeasureMode);
     ~MicroLidar();
     
-    void Init();
     // Add a single device
     void Add(int DigGpioIdx);
     // Init all sensors that were Add'ed
     void InitSensors();
-    // Start taking measurements
+    // Start taking measurements. this is only valid when in CONTINUOS_MEASURE_MODE
     void StartMeasurements();
     // Stop Measurememnts
     void StopMeasurements();
+    void PollDevices();
     // Get the measurement for a single device
     int GetMeasurement(int DigGpioIdx);
+    // Calibrate the indicated device
+    void Calibrate(int DigGpioIdx);
+    int GetStatus(int DigGpioIdx) { return Devices[DigGpioIdx]->Status_get(); }
 
 private:
     void SetAllGpio(bool State);

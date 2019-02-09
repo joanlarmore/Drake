@@ -269,7 +269,7 @@ DalekDrive::InitDalekDrive(void)
 	m_leftMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[FRONT]->SetRampRate(RAMP_RATE);
-	m_leftMotor[FRONT]->SetInverted(false);
+	m_leftMotor[FRONT]->SetInverted(true);
 
     m_rightMotor[FRONT]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
@@ -281,7 +281,7 @@ DalekDrive::InitDalekDrive(void)
   	m_leftMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[REAR]->SetRampRate(RAMP_RATE);
-	m_leftMotor[REAR]->SetInverted(false);
+	m_leftMotor[REAR]->SetInverted(true);
 
     m_rightMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);

@@ -15,7 +15,13 @@ Robot::RobotInit()
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
     m_leftStick = new frc::Joystick(1);
     m_rightStick = new frc::Joystick(2);
-    microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::SINGLE_MEASURE_MODE);
+    microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::CONTINUOUS_MEASURE_MODE);
+    //for (int i = 0; i < LIDAR_COUNT; i++)
+    //    microLidar->Add(i);
+    for (int i = 0; i < LIDAR_COUNT; i++)
+        microLidar->Add(i);
+    microLidar->InitSensors();
+    microLidar->StartMeasurements();
     lineSensor = new LineSensor();
     dalekShuffleboard = new DalekShuffleboard(microLidar, lineSensor);
 }
@@ -23,6 +29,7 @@ Robot::RobotInit()
 void
 Robot::RobotPeriodic() 
 {
+    microLidar->PollDevices();
     dalekShuffleboard->continious();
 }
 
@@ -47,7 +54,7 @@ Robot::TeleopPeriodic()
     // pick one to test, all should in principle work for the mecanum wheels
     // m_drive->TankDrive(m_leftStick, m_rightStick);
     // m_drive->Polar(m_leftStick, m_rightStick);
-    m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
+    //m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
 }
 
 void
