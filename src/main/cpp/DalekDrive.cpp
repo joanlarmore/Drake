@@ -1,4 +1,5 @@
 #include <Drake.h>
+#include <frc/JoyStick.h>
 
 using namespace frc;
 using namespace rev;
@@ -188,7 +189,7 @@ void
 DalekDrive::Polar(frc::GenericHID* leftStick, frc::GenericHID* rightStick)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DrivePolar(leftStick->GetY(), rightStick->GetY(), rightStick->GetX());
+		m_mecanum->DrivePolar(rightStick->GetY(), rightStick->GetX(), leftStick->GetY());
 	}
 }
 
@@ -213,8 +214,7 @@ DalekDrive::Cartesian(frc::GenericHID* leftStick, frc::GenericHID* rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(leftStick->GetY(), rightStick->GetY(), rightStick->GetX(),
-			gyroAngle);
+		m_mecanum->DriveCartesian(leftStick->GetY(), leftStick->GetX(), rightStick->GetX(), gyroAngle);
 	}
 }
 
@@ -223,7 +223,7 @@ DalekDrive::Cartesian(frc::GenericHID& leftStick, frc::GenericHID& rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(leftStick.GetY(), rightStick.GetY(), rightStick.GetX(),
+		m_mecanum->DriveCartesian(rightStick.GetX(), rightStick.GetY(), leftStick.GetY(),
 			gyroAngle);
 	}
 }
@@ -269,25 +269,25 @@ DalekDrive::InitDalekDrive(void)
 	m_leftMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[FRONT]->SetRampRate(RAMP_RATE);
-	m_leftMotor[FRONT]->SetInverted(false);
+	m_leftMotor[FRONT]->SetInverted(true);
 
     m_rightMotor[FRONT]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_rightMotor[FRONT]->SetRampRate(RAMP_RATE);
-	m_rightMotor[FRONT]->SetInverted(false);
+	m_rightMotor[FRONT]->SetInverted(true);
 
     m_leftMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
   	m_leftMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_leftMotor[REAR]->SetRampRate(RAMP_RATE);
-	m_leftMotor[REAR]->SetInverted(false);
+	m_leftMotor[REAR]->SetInverted(true);
 
     m_rightMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_rightMotor[REAR]->SetRampRate(RAMP_RATE);
-	m_rightMotor[REAR]->SetInverted(false);
+	m_rightMotor[REAR]->SetInverted(true);
 
     m_leftMotor[FRONT]->StopMotor();  m_leftMotor[REAR]->StopMotor();
     m_rightMotor[FRONT]->StopMotor(); m_rightMotor[REAR]->StopMotor();
