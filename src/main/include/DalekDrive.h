@@ -15,7 +15,7 @@
 #define CAN_TIMEOUT 100
 #define STALL_LIMIT 60
 #define FREE_LIMIT  2
-#define RAMP_RATE   2
+#define RAMP_RATE   0.5
 #define LEFT        0
 #define RIGHT       1
 #define FRONT       0

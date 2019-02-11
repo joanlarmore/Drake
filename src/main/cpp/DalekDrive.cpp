@@ -1,4 +1,5 @@
 #include <Drake.h>
+#include <frc/JoyStick.h>
 
 using namespace frc;
 using namespace rev;
@@ -101,7 +102,7 @@ DalekDrive::TankDrive(GenericHID* leftStick, GenericHID* rightStick,
              bool squaredInputs)
 {
 	if(m_type == DalekDrive::driveType::kDifferential)
-		m_diffdrive->TankDrive(leftStick->GetY() * 0.25, rightStick->GetY() * 0.25, squaredInputs);
+		m_diffdrive->TankDrive(leftStick->GetY(), rightStick->GetY(), squaredInputs);
 	else {
 		// note mecanum wheels aren't really meant to run this way but can.  As such
 		// it's not supported by the MecanumDrive class, so hacked up tank drive
@@ -213,8 +214,7 @@ DalekDrive::Cartesian(frc::GenericHID* leftStick, frc::GenericHID* rightStick,
 			double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(rightStick->GetX(), rightStick->GetY(), leftStick->GetY(),
-			gyroAngle);
+		m_mecanum->DriveCartesian(leftStick->GetY(), leftStick->GetX(), rightStick->GetX(), gyroAngle);
 	}
 }
 
@@ -275,7 +275,7 @@ DalekDrive::InitDalekDrive(void)
 	m_rightMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_rightMotor[FRONT]->SetRampRate(RAMP_RATE);
-	m_rightMotor[FRONT]->SetInverted(false);
+	m_rightMotor[FRONT]->SetInverted(true);
 
     m_leftMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
   	m_leftMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
@@ -287,7 +287,7 @@ DalekDrive::InitDalekDrive(void)
 	m_rightMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
 	m_rightMotor[REAR]->SetRampRate(RAMP_RATE);
-	m_rightMotor[REAR]->SetInverted(false);
+	m_rightMotor[REAR]->SetInverted(true);
 
     m_leftMotor[FRONT]->StopMotor();  m_leftMotor[REAR]->StopMotor();
     m_rightMotor[FRONT]->StopMotor(); m_rightMotor[REAR]->StopMotor();

@@ -25,6 +25,10 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 private:
   DalekDrive *m_drive;
+  rev::CANSparkMax *m_leftFront;
+  rev::CANSparkMax *m_leftRear;
+  rev::CANSparkMax *m_rightFront;
+  rev::CANSparkMax *m_rightRear;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
 };
