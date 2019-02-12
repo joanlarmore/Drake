@@ -15,9 +15,8 @@ Robot::RobotInit()
 {
     
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
-    m_leftStick = new frc::Joystick(22);
-    m_leftStick = new frc::Joystick(0);
-    m_rightStick = new frc::Joystick(1);
+    m_leftStick = new frc::Joystick(1);
+    m_rightStick = new frc::Joystick(2);
 }
 
 void
