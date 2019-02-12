@@ -33,4 +33,6 @@ private:
   MicroLidar *microLidar;
   LineSensor *lineSensor;
   DalekShuffleboard *dalekShuffleboard;
+
+  AnalogPotentiometer *pot;
 };

@@ -24,6 +24,7 @@ Robot::RobotInit()
     microLidar->StartMeasurements();
     lineSensor = new LineSensor();
     dalekShuffleboard = new DalekShuffleboard(microLidar, lineSensor);
+    pot = new AnalogPotentiometer(0, 360.0, 0.0);
 }
 
 void
@@ -31,6 +32,7 @@ Robot::RobotPeriodic()
 {
     microLidar->PollDevices();
     dalekShuffleboard->continious();
+    std::cout << "Pot: " << pot->Get() << std::endl;
 }
 
 void
