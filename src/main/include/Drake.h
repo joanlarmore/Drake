@@ -7,11 +7,16 @@
 
 #pragma once
 
+
 #include <string>
 #include <frc/WPILib.h>
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
+#include <frc/XboxController.h>
+#include <frc/Servo.h>
+#include <frc/AnalogPotentiometer.h>
 #include "DalekDrive.h"
+#include "Arm.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -22,8 +27,13 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
-private:
+
+  enum CANIDs {LEFT_FRONT_MOTOR = 1, LEFT_REAR_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_REAR_MOTOR, SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR, CLAW_MOTOR, CLAW_SERVO};
+ 
+ private:
   DalekDrive *m_drive;
+  Arm *m_arm;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
+  frc::Joystick *m_fakeStick;
 };
