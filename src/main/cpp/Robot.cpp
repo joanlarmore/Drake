@@ -15,9 +15,9 @@ Robot::RobotInit()
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
     m_leftStick = new frc::Joystick(1);
     m_rightStick = new frc::Joystick(2);
-    m_fakeStick = new frc::Joystick(3);
 
     m_arm = new Arm(SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR);
+    m_claw = new Claw(CLAW_MOTOR, 0); //clawServo is PWM...? I hard-coded the ID
 }
 
 void
@@ -43,13 +43,12 @@ Robot::TeleopInit()
 void
 Robot::TeleopPeriodic()
 {
-    // pick one to test, all should in principle work for the mecanum wheels
-    // m_drive->TankDrive(m_leftStick, m_rightStick);
-    //m_drive->Polar(m_leftStick, m_rightStick);
     // m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
 
-    // New class for single-stick mecanum control
-    m_drive->Cartesian(m_leftStick, 0);
+    //DELETE AFTER DONE TESTING (this is a temp class to find out what voltages correspond to what heights)
+    //m_arm->TEMPCONTROL(m_leftStick->GetY() * .35);
+
+    // this stuff is joshified code which is untested
 }
 
 void

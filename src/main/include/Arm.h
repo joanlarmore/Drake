@@ -2,10 +2,13 @@
 
 // claw servo position must be public or have a public get function
 
+#include <iostream>
 #include <Math.h>
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogPotentiometer.h>
+
+using namespace rev;
 
 // in centemeters
 #define armBaseHeight             343;
@@ -28,22 +31,27 @@
 //#define ballPickUpY               165;
 #define discLoadHeight            381;
 
+enum CLAW_LOCATIONS {BALL_PICK_UP, HATCH_PICK_UP, CARGO_SHIP, ROCKET_LOW, ROCKET_MID, ROCKET_HIGH}; // there is def a better way for this but this exact enum is in Drake.h
+
 class Arm {
   public:
+    float shoulderAngle, elbowAngle;
 
     Arm(int shoulderMotor, int elbowMotor, int turretMotor);
-    Arm(rev::CANSparkMax *shoulderMotor, rev::CANSparkMax *elbowMotor, WPI_TalonSRX *turretMotor);
+    Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor);
 
-    
+    void moveToPosition(bool hasBall, int position); // position is  from enum DROP_LOCATIONS
+    void TEMPCONTROL(float voltage);
   
   private:
-    rev::CANSparkMax *m_shoulderMotor, *m_elbowMotor;
-    rev::CANEncoder *m_shoulderMotorEncoder, *m_elbowMotorEncoder;
-    WPI_TalonSRX *m_turretMotor;
+    CANSparkMax *m_shoulderMotor;
+    CANEncoder *m_shoulderMotorEncoder;
+    WPI_TalonSRX *m_elbowMotor, *m_turretMotor;
     frc::Potentiometer *m_shoulderPot, *m_elbowPot, *m_turretPot; //Setup to roboRio analog input 0 <-- this was here before idk but also check pots
     // AnalogInput *; // <-- check where they are on the arm / limit switches (maybe pots?)
  
-    void FindArmAngles(float x, float y, float *ang1, float *ang2);
-    void FindArmMinMax(float baseMin, float baseMax, float *elbowMin, float *elbowMax);
+    void moveToPosition(float x, float y);
+    bool FindArmAngles(float x, float y, float *ang1, float *ang2);
+    void FindArmMinMax(float base, float *elbowMin, float *elbowMax);
 };
 
