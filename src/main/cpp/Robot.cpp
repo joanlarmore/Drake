@@ -13,6 +13,10 @@ void
 Robot::RobotInit() 
 {
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
+
+    // NOTE Set these ID's properly !!
+    m_ArmTest = new ArmTest(0,0,0,0,0,0,0);
+
     m_leftStick = new frc::Joystick(1);
     m_rightStick = new frc::Joystick(2);
 }
@@ -46,7 +50,10 @@ Robot::TeleopPeriodic()
     // m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
 
     // New class for single-stick mecanum control
-    m_drive->Cartesian(m_leftStick, 0);
+    //m_drive->Cartesian(m_leftStick, 0);
+
+    // Test the Arm
+    m_ArmTest->Periodic(m_leftStick, m_rightStick);
 }
 
 void

@@ -12,6 +12,7 @@
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
 #include "DalekDrive.h"
+#include "ArmTest.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -24,6 +25,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 private:
   DalekDrive *m_drive;
+  ArmTest *m_ArmTest;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
 };
