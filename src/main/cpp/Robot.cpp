@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 
+// I AM CURRENTLY WORKING ON THE ARM CODE
+
 #include <iostream>
 #include "Drake.h"
 
@@ -26,8 +28,8 @@ Robot::RobotInit()
     m_rightStick = new frc::Joystick(2);
     m_xbox = new frc::XboxController(3);
 
-    //m_arm = new Arm(SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR);
-    m_claw = new Claw(CLAW_MOTOR, 0); //clawServo is PWM...? I hard-coded the ID
+    m_arm = new Arm(SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR);
+    m_claw = new Claw(CLAW_MOTOR, 0);
 
 }
 
@@ -60,7 +62,7 @@ Robot::TeleopPeriodic()
 
 
     //Motor Voltage values
-    // m_arm->printVoltage();
+    m_arm->printVoltage();
     m_claw->printVoltage();
 }
 

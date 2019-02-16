@@ -54,7 +54,8 @@ class Arm {
     CANSparkMax *m_shoulderMotor;
     CANEncoder *m_shoulderMotorEncoder;
     WPI_TalonSRX *m_elbowMotor, *m_turretMotor;
-    frc::Potentiometer *m_shoulderPot, *m_elbowPot, *m_turretPot; //Setup to roboRio analog input 0 <-- this was here before idk but also check pots
+      *m_elbowPot, *m_turretPot;
+    frc::Potentiometer *m_shoulderPot; //Setup to roboRio analog input 0 <-- this was here before idk but also check pots
     // AnalogInput *; // <-- check where they are on the arm / limit switches (maybe pots?)
  
     bool FindArmAngles(float x, float y, float *ang1, float *ang2);
