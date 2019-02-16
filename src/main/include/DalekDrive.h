@@ -10,7 +10,7 @@
  */
 #pragma once
 
-#include <Drake.h>
+
 
 #define CAN_TIMEOUT 100
 #define STALL_LIMIT 60
@@ -67,6 +67,7 @@ class DalekDrive {
 	void InitDalekDrive();
 	double squareInput(double v);
 	void printFaults(int side, int faults);
+	float DeadZone(float input, float range);
 	rev::CANSparkMax *m_leftMotor[NUM_MOTORS_PER_SIDE];
 	rev::CANSparkMax *m_rightMotor[NUM_MOTORS_PER_SIDE];
     frc::SpeedControllerGroup *m_left;

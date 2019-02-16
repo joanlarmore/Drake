@@ -22,6 +22,13 @@ Claw::Claw(WPI_TalonSRX *clawMotor, Servo *clawServo) {
     m_clawServo = clawServo;
 }
 
+void 
+Claw::printVoltage()
+{
+    //min: .25 max:.8
+    frc::SmartDashboard::PutNumber("CLaw Motor current", m_clawMotor->GetOutputCurrent());
+    //frc::SmartDashboard::PutNumber("Servo current", m_clawServo->GetOutputCurrent());
+}
 void
 Claw::OpenServo() {
     m_clawServo->SetAngle(servoOpen);
@@ -46,4 +53,13 @@ Claw::RetrieveBall() {
 void
 Claw::EjectBall() {
     m_clawMotor->Set(-1);              // or positive
+}
+
+void Claw::TEMPSERVO() {
+    if (tempBool) {
+        OpenServo();
+    } else{
+        CloseServo();
+    }
+    tempBool = !tempBool;
 }

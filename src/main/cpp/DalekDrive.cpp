@@ -240,7 +240,7 @@ void
 DalekDrive::Cartesian(frc::Joystick& Stick, double gyroAngle)
 {
 	if(m_type == DalekDrive::driveType::kMecanum) {
-		m_mecanum->DriveCartesian(Stick.GetX(), Stick.GetY(), Stick.GetTwist(),
+		m_mecanum->DriveCartesian(DeadZone(Stick.GetX(), .3) * .5, DeadZone(Stick.GetY(), .3) * -.5, DeadZone(Stick.GetTwist(), .3) * .2,
 			gyroAngle);
 	}
 }
@@ -300,6 +300,15 @@ DalekDrive::InitDalekDrive(void)
 
     m_leftMotor[FRONT]->StopMotor();  m_leftMotor[REAR]->StopMotor();
     m_rightMotor[FRONT]->StopMotor(); m_rightMotor[REAR]->StopMotor();
+}
+
+float
+DalekDrive::DeadZone(float input, float range) {
+    if (abs(input) < range) {
+        return 0;
+    } else {
+        return input;
+    }
 }
 
 void

@@ -9,15 +9,26 @@
 #include <iostream>
 #include "Drake.h"
 
+float
+DeadZone(float input, float range) {
+    if (abs(input) < range) {
+        return 0;
+    } else {
+        return input;
+    }
+}
+
 void
 Robot::RobotInit() 
 {
     m_drive = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
-    m_leftStick = new frc::Joystick(1);
-    m_rightStick = new frc::Joystick(2);
+    m_leftStick = new frc::Joystick(2);
+    m_rightStick = new frc::Joystick(1);
+    m_otherStick = new frc::Joystick(3);
 
     m_arm = new Arm(SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR);
     m_claw = new Claw(CLAW_MOTOR, 0); //clawServo is PWM...? I hard-coded the ID
+
 }
 
 void
@@ -43,11 +54,27 @@ Robot::TeleopInit()
 void
 Robot::TeleopPeriodic()
 {
-    // m_drive->Cartesian(m_leftStick, m_rightStick, 0.0);
+    m_drive->Cartesian(*m_leftStick, 0.0);
 
     //DELETE AFTER DONE TESTING (this is a temp class to find out what voltages correspond to what heights)
-    //m_arm->TEMPCONTROL(m_leftStick->GetY() * .35);
+    m_arm->TEMP_ROTATE_ELBOW(m_otherStick->GetY() * -.35);
+    m_arm->TEMP_ROTATE_SHOULDER(DeadZone(m_otherStick->GetX(), .25));
+    m_arm->TEMP_ROTATE_TURRET(m_rightStick->GetY() * .5);
 
+    //Motor Voltage values
+    m_arm->printVoltage();
+    m_claw->printVoltage();
+
+    if (m_otherStick->GetTrigger()) {
+         m_claw->EjectBall();
+     }
+     if (m_leftStick->GetTrigger()) {
+         m_claw->RetrieveBall();
+     }
+     /*if (m_rightStick->GetTrigger()) {
+         m_claw->TEMPSERVO();
+     }
+     */
     // this stuff is joshified code which is untested
 }
 

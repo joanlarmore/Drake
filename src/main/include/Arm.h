@@ -7,6 +7,8 @@
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogPotentiometer.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include "frc/smartdashboard/SmartDashBoard.h"
 
 using namespace rev;
 
@@ -41,7 +43,10 @@ class Arm {
     Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor);
 
     void moveToPosition(bool hasBall, int position); // position is  from enum DROP_LOCATIONS
-    void TEMPCONTROL(float voltage);
+    void TEMP_ROTATE_SHOULDER(float voltage);
+    void TEMP_ROTATE_TURRET(float voltage);
+    void TEMP_ROTATE_ELBOW(float voltage);
+    void printVoltage();
   
   private:
     CANSparkMax *m_shoulderMotor;
@@ -53,5 +58,6 @@ class Arm {
     void moveToPosition(float x, float y);
     bool FindArmAngles(float x, float y, float *ang1, float *ang2);
     void FindArmMinMax(float base, float *elbowMin, float *elbowMax);
+    // prob need a method to convert elbow angles to voltage
 };
 

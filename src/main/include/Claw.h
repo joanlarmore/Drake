@@ -3,6 +3,8 @@
 #include <iostream>
 #include <ctre/Phoenix.h>
 #include <frc/Servo.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include "frc/smartdashboard/SmartDashBoard.h"
 // #include <DigitalInput.h>
 
 #define servoOpen       90
@@ -22,9 +24,13 @@ class Claw {
         void CloseServo();
         void RetrieveBall();
         void EjectBall();
+        void TEMPSERVO();
+        void printVoltage();
 
     private:
         WPI_TalonSRX *m_clawMotor;
         Servo *m_clawServo;
         // DigitalInput *m_clawLimit;        <-- if the limit switch is a DIO (otherwise i think it is purely electrical)
+
+        bool tempBool;
 };

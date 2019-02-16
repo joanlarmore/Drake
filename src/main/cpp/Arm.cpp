@@ -15,7 +15,18 @@ Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *tur
 }
 
 void 
-Arm::TEMPCONTROL(float voltage) {
+Arm::printVoltage()
+{
+    //min: .156 max: .158
+    frc::SmartDashboard::PutNumber("Shoulder current", m_shoulderMotor->GetOutputCurrent());
+    //min:.125 max:.375
+    frc::SmartDashboard::PutNumber("Elbow current", m_elbowMotor->GetOutputCurrent());
+    //min:.125 max:.8
+    frc::SmartDashboard::PutNumber("Turret current", m_turretMotor->GetOutputCurrent());
+}
+
+void 
+Arm::TEMP_ROTATE_SHOULDER(float voltage) {
 
     // std::cout << voltage << "\n";
     m_shoulderMotor->Set(voltage);
@@ -37,6 +48,15 @@ Arm::moveToPosition(float x, float y) {
     // ^ these may need an offset for the zero position
 
 }
+
+void Arm::TEMP_ROTATE_ELBOW(float voltage) {
+    m_elbowMotor->Set(voltage);
+}
+
+void Arm::TEMP_ROTATE_TURRET(float voltage){
+    m_turretMotor->Set(voltage);
+} 
+
 
 void
 Arm::moveToPosition(bool hasBall, int position) {
