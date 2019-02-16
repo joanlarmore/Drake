@@ -26,5 +26,4 @@ private:
   DalekDrive *m_drive;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
-  frc::Joystick *m_fakeStick;
 };
