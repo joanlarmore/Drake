@@ -49,6 +49,6 @@ void
 Claw::printVoltage()
 {
     //min: .25 max:.8
-    frc::SmartDashboard::PutNumber("CLaw Motor current", m_clawMotor->GetOutputCurrent());
+    SmartDashboard::PutNumber("CLaw Motor current", m_clawMotor->GetOutputCurrent());
     //frc::SmartDashboard::PutNumber("Servo current", m_clawServo->GetOutputCurrent());
 }
