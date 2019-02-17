@@ -17,7 +17,7 @@ Robot::RobotInit()
 {
     m_drive      = new DalekDrive(1, 2, 3, 4, DalekDrive::driveType::kMecanum);
     m_leftStick  = new frc::Joystick(1);
-    m_rightStick = new frc::Joystick(2);
+    //m_rightStick = new frc::Joystick(2);
     m_xbox       = new frc::XboxController(3);
     m_dPad[R]    = new frc::POVButton(*m_xbox, 0);
     m_dPad[T]    = new frc::POVButton(*m_xbox, 90);
@@ -51,13 +51,12 @@ Robot::TeleopInit()
 void
 Robot::TeleopPeriodic()
 {
-    m_drive->Cartesian(*m_leftStick, 0.0);
-    // claw periodic function
+    // m_drive->Cartesian(*m_leftStick, 0.0);
     m_claw->Tick(m_xbox);
     m_arm->Tick(m_xbox, m_dPad);
 
     //Motor Voltage values
-    m_arm->printVoltage();
+    m_arm->printVoltage(m_leftStick);
     m_claw->printVoltage();
 }
 

@@ -277,25 +277,25 @@ DalekDrive::InitDalekDrive(void)
     m_leftMotor[FRONT]->SetCANTimeout(CAN_TIMEOUT);
 	m_leftMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
-	m_leftMotor[FRONT]->SetClosedLoopRampRate(RAMP_RATE);                  // used to be SetRampRate... update i guess... check if this is oprn or closed
+	m_leftMotor[FRONT]->SetOpenLoopRampRate(RAMP_RATE);                  // used to be SetRampRate... update i guess... check if this is oprn or closed
 	m_leftMotor[FRONT]->SetInverted(false);
 
     m_rightMotor[FRONT]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[FRONT]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[FRONT]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
-	m_rightMotor[FRONT]->SetClosedLoopRampRate(RAMP_RATE);                // same
+	m_rightMotor[FRONT]->SetOpenLoopRampRate(RAMP_RATE);                // same
 	m_rightMotor[FRONT]->SetInverted(false);
 
     m_leftMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
   	m_leftMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_leftMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
-	m_leftMotor[REAR]->SetClosedLoopRampRate(RAMP_RATE);                  // same
+	m_leftMotor[REAR]->SetOpenLoopRampRate(RAMP_RATE);                  // same
 	m_leftMotor[REAR]->SetInverted(false);
 
     m_rightMotor[REAR]->SetCANTimeout(CAN_TIMEOUT);
 	m_rightMotor[REAR]->SetIdleMode(CANSparkMax::IdleMode::kBrake);
     m_rightMotor[REAR]->SetSmartCurrentLimit(STALL_LIMIT, FREE_LIMIT, 0);
-	m_rightMotor[REAR]->SetClosedLoopRampRate(RAMP_RATE);                 // same
+	m_rightMotor[REAR]->SetOpenLoopRampRate(RAMP_RATE);                 // same
 	m_rightMotor[REAR]->SetInverted(false);
 
     m_leftMotor[FRONT]->StopMotor();  m_leftMotor[REAR]->StopMotor();

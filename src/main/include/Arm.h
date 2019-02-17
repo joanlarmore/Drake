@@ -10,10 +10,13 @@
 #include <frc/buttons/POVButton.h>
 #include <frc/XboxController.h>
 
+#include <Joystick.h>
+
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc/smartdashboard/SmartDashBoard.h"
 
 using namespace rev;
+using namespace std;
 
 // in millimeters (check these)
 #define armBaseHeight             343
@@ -50,19 +53,19 @@ class Arm {
     Arm(int shoulderMotor, int elbowMotor, int turretMotor, int shoulderPot);
     Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, Potentiometer *shoulderPot);
 
-    void Tick(XboxController *xbox, POVButton *dPad[4]); // check dpad syntax
+    void Tick(XboxController *xbox, POVButton *dPad[4]);
     void moveToPosition(float x, float y);
-    void printVoltage();
+    void printVoltage(Joystick *bbb);
   
   private:
     CANSparkMax *m_shoulderMotor;
     CANEncoder *m_shoulderMotorEncoder;
     WPI_TalonSRX *m_elbowMotor, *m_turretMotor;
-    //  *m_elbowPot, *m_turretPot;
     Potentiometer *m_shoulderPot;
- 
+
     void SetMotors();
     bool FindArmAngles(float x, float y, float *ang1, float *ang2);
-    void FindArmMinMax(float base, float *elbowMin, float *elbowMax);
+    // void FindArmMinMax(float base, float *elbowMin, float *elbowMax);
+    float DeadZone(float input, float range);
 };
 

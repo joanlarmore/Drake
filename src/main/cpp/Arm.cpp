@@ -1,5 +1,4 @@
 // for now, both motors will move into position at the same time... however this might need to change in order to keep in bounds and not hit walls in front of us 
-// also in the moveToPosition, make sure the base angle is allowed on the robot, and otherwise make valid false
 
 #include "Arm.h"
 
@@ -8,8 +7,10 @@ Arm::Arm(int shoulderMotor, int elbowMotor, int turretMotor, int shoulderPot)
     m_shoulderMotor        = new CANSparkMax(shoulderMotor, CANSparkMax::MotorType::kBrushless);
     m_elbowMotor           = new WPI_TalonSRX(elbowMotor);
     m_turretMotor          = new WPI_TalonSRX(turretMotor);
-    m_shoulderPot          = new AnalogPotentiometer(shoulderPot, 1.0, 0.0); // maybe change the full range
+    m_shoulderPot          = new AnalogPotentiometer(shoulderPot, 1.0, 0.0);
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    curX = 0;
+    curY = 0;
 }
 
 Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, Potentiometer *shoulderPot)
@@ -19,12 +20,24 @@ Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *tur
     m_turretMotor          = turretMotor;
     m_shoulderPot          = shoulderPot;
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    curX = 0;
+    curY = 0;
+}
+
+float
+Arm::DeadZone(float input, float range) {
+    if (abs(input) < range) {
+        return 0;
+    } else {
+        return input;
+    }
 }
 
 void Arm::Tick(XboxController *xbox, POVButton *dPad[])
 {
-    m_turretMotor->Set(xbox->GetX(GenericHID::JoystickHand::kRightHand) * .5);
-    float x, y;
+    m_turretMotor->Set(DeadZone(xbox->GetX(GenericHID::JoystickHand::kRightHand), .15) * .5);
+    float x = 0;
+    float y = 0;
     bool move = true;
     if (xbox->GetAButton()) {
         if (dPad[R]->Get()) {
@@ -73,10 +86,13 @@ void Arm::Tick(XboxController *xbox, POVButton *dPad[])
     } else if (xbox->GetTriggerAxis(GenericHID::JoystickHand::kRightHand) > .1) {
         // FETAL POSITION
     } else {
-        x = curX + xbox->GetY(GenericHID::JoystickHand::kRightHand) * .5; // .5 is a guess... fix in testing
-        y = curY + xbox->GetY(GenericHID::JoystickHand::kLeftHand) * .5;  // same as above
-        if (x == curX && y == curY) {
+        float xShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kRightHand), .15) * .5; // .5 is a guess... fix in testing
+        float yShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .15) * .5;  // same as above
+        if (xShift == 0 && yShift == 0) {
             move = false;
+        } else {
+            x += xShift;
+            y += yShift;
         }
     }
     if (move) {
@@ -100,12 +116,30 @@ Arm::moveToPosition(float x, float y)
     }
 }
 
+// the functions used to set the potentiometers need to change based on the robot
 void
 Arm::SetMotors() {
-    // here the shoulderAngle and elbowAngle are updated, so they need to be converted into Set() (i think just experimentation)
-    // i think use the method below for elbow
-    // m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, 0); // the second number is the voltage [0-3.3] i think
-    // the shoulder has a shoulderPot as an analog input so that needs a manual configuration, but i think that is just full speed toward the angle?
+    // set the position the potentiometer should be at in the PID closed loop of the elbow Talon (second parameter is a voltage 0-3.3 i think)
+    m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, -.553446 * elbowAngle + 2.38284);
+
+    // set the shoulder speed    
+    if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .1) { // .1 is a placeholder for how close the motor can get at full power
+        if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
+            m_shoulderMotor->Set(-1); // too fast?
+        } else {
+            m_shoulderMotor->Set(1); // same
+        }
+    } else {
+        if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .01) { // .01 is a placeholder for how close to let the motor get without any extra adjustment
+            if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
+                m_shoulderMotor->Set(-.1); // this is a guess
+            } else {
+                m_shoulderMotor->Set(.1); // also a guess
+            }
+        } else {
+            m_shoulderMotor->Set(0);
+        }
+    }
 }
 
 // this function takes in the x distance from the target (starting from the edge of the drive train), and the y from the ground
@@ -113,26 +147,24 @@ bool
 Arm::FindArmAngles(float x, float y, float *ang1, float *ang2)
 {
 	y -= armBaseHeight;
-    //                                                           TODO:
-    //                                                           make the x value vary based on where the turret is (for now i assume it is facing forward)
-    x += armBaseFrontX - clawLength; //                          <-- here
+    // must make the x value vary based on where the turret is (for now i assume it is facing forward)
+    x += armBaseFrontX - clawLength;
     float r = sqrt(x*x+y*y);
 	*ang2 = acos((highArmLength * highArmLength + lowArmLength * lowArmLength - r * r) / (2 * highArmLength * lowArmLength));
 	*ang1 = acos((lowArmLength * lowArmLength + r * r - highArmLength * highArmLength) / (2 * lowArmLength * r)) + atan(y / x);
-    float elbowMin, elbowMax;
-    FindArmMinMax(*ang1, &elbowMin, &elbowMax);
-    return (*ang1 > 0 && *ang2 > 0) && (*ang2 > elbowMin && *ang2 < elbowMax); // the first part is making sure they are both not nan
+    // HERE must find out whether or not the angles are allowed on the robot and return true or false accordingly
+    return (*ang1 > 0 && *ang2 > 0);
 }
 
-void
-Arm::FindArmMinMax(float base, float *elbowMin, float *elbowMax)
-{
-	*elbowMin = .38*((150.0-base)/.8)+10.0;
-	*elbowMax = .45*((150.0-base)/.8)+110.0-*elbowMin;
-}
+// void
+// Arm::FindArmMinMax(float base, float *elbowMin, float *elbowMax)
+// {
+// 	*elbowMin = .38*((150.0-base)/.8)+10.0;
+// 	*elbowMax = .45*((150.0-base)/.8)+110.0-*elbowMin;
+// }
 
 void 
-Arm::printVoltage()
+Arm::printVoltage(Joystick *bbb)
 {
     //min: .156 max: .158
     SmartDashboard::PutNumber("Shoulder current", m_shoulderMotor->GetOutputCurrent());
