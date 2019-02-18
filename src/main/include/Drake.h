@@ -13,6 +13,7 @@
 #include <ctre/Phoenix.h>
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "DalekDrive.h"
+#include "ArmTest.h"
 
 
 class Robot : public frc::TimedRobot {
@@ -26,10 +27,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 private:
   DalekDrive *m_drive;
-  rev::CANSparkMax *m_leftFront;
-  rev::CANSparkMax *m_leftRear;
-  rev::CANSparkMax *m_rightFront;
-  rev::CANSparkMax *m_rightRear;
+  ArmTest *m_ArmTest;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
 };
