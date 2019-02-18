@@ -7,14 +7,20 @@
 
 #pragma once
 
+
 #include <string>
 #include <frc/WPILib.h>
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
-#include "frc/smartdashboard/SmartDashboard.h"
+#include <frc/XboxController.h>
+#include <frc/buttons/POVButton.h>
+#include <frc/Servo.h>
+#include <frc/AnalogPotentiometer.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include "frc/smartdashboard/SmartDashBoard.h"
 #include "DalekDrive.h"
-#include "ArmTest.h"
-
+#include "Arm.h"
+#include "Claw.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -25,9 +31,16 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
-private:
+
+  enum CANIDs {LEFT_FRONT_MOTOR = 1, LEFT_REAR_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_REAR_MOTOR, SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR, CLAW_MOTOR};
+  enum DIOS   {FRONT_LEFT_LIDAR = 0, FRONT_RIGHT_LIDAR, RIGHT_FRONT_LIDAR, RIGHT_REAR_LIDAR, LEFT_FRONT_LIDAR_, LEFT_REAR_LIDAR};
+
+ private:
   DalekDrive *m_drive;
-  ArmTest *m_ArmTest;
+  Arm *m_arm;
+  Claw *m_claw;
   frc::Joystick *m_leftStick;
   frc::Joystick *m_rightStick;
+  frc::XboxController *m_xbox;
+  frc::POVButton *m_dPad[4];
 };
