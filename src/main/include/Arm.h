@@ -10,7 +10,7 @@
 #include <frc/buttons/POVButton.h>
 #include <frc/XboxController.h>
 
-#include <Joystick.h>
+#include <frc/Joystick.h>
 
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc/smartdashboard/SmartDashBoard.h"
