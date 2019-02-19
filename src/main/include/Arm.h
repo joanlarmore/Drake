@@ -26,17 +26,17 @@ using namespace std;
 #define maxLowArmAngle            150
 #define minLowArmAngle            70
 #define lowArmLength              813
-#define highArmLength             1016
-#define defaultX                  190                    // i made this up
+#define highArmLength             1092
+#define defaultX                  470                    // i made this up
 #define cargoHatchHeight           381          // 1
 #define cargoBallHeight           1219         // 2
 #define cargoBallLength           750                    // i made this up
-#define rocketHatchLowHeight       483  // check   3
-#define rocketBallLowHeight       699//           4
-#define rocketHatchMiddleHeight    1194//          5
-#define rocketBallMiddleHeight    1410//          6
-#define rocketHatchTopHeight       1905//          7
-#define rocketBallTopHeight       2121//          8
+#define rocketHatchLowHeight       495  // check   3
+#define rocketBallLowHeight       683//           4
+#define rocketHatchMiddleHeight    1168//          5
+#define rocketBallMiddleHeight    1422//          6
+#define rocketHatchTopHeight       1867//          7
+#define rocketBallTopHeight       2083//          8
 #define ballPickUpX               279 //guess     9
 #define ballPickUpY               165 //guess
 #define discLoadHeight            381//          10      not used for controls
@@ -51,7 +51,7 @@ class Arm {
     float shoulderAngle, elbowAngle, curX, curY;
 
     Arm(int shoulderMotor, int elbowMotor, int turretMotor, int shoulderPot);
-    Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, Potentiometer *shoulderPot);
+    Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, AnalogPotentiometer *shoulderPot);
 
     void Tick(XboxController *xbox, POVButton *dPad[4]);
     void moveToPosition(float x, float y);
@@ -61,7 +61,7 @@ class Arm {
     CANSparkMax *m_shoulderMotor;
     CANEncoder *m_shoulderMotorEncoder;
     WPI_TalonSRX *m_elbowMotor, *m_turretMotor;
-    Potentiometer *m_shoulderPot;
+    AnalogPotentiometer *m_shoulderPot;
 
     void SetMotors();
     bool FindArmAngles(float x, float y, float *ang1, float *ang2);

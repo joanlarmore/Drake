@@ -51,7 +51,7 @@ Robot::TeleopInit()
 void
 Robot::TeleopPeriodic()
 {
-    // m_drive->Cartesian(*m_leftStick, 0.0);
+    m_drive->Cartesian(*m_leftStick, 0.0);
     m_claw->Tick(m_xbox);
     m_arm->Tick(m_xbox, m_dPad);
 
