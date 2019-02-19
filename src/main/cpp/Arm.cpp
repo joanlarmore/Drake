@@ -9,6 +9,7 @@ Arm::Arm(int shoulderMotor, int elbowMotor, int turretMotor, int shoulderPot)
     m_turretMotor          = new WPI_TalonSRX(turretMotor);
     m_shoulderPot          = new AnalogPotentiometer(shoulderPot, 1.0, 0.0);
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    ArmInit();
     curX = 0;
     curY = 0;
 }
@@ -20,10 +21,22 @@ Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *tur
     m_turretMotor          = turretMotor;
     m_shoulderPot          = shoulderPot;
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    ArmInit();
     curX = 0;
     curY = 0;
 }
 
+void
+Arm::ArmInit()
+{
+    // needed to configure the talon to make sure things are ready for position mode
+    m_elbowMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::Analog, 0, 0);
+    m_elbowMotor->SetSensorPhase(true);
+    m_elbowMotor->Config_kF(0, 0.0, 0);
+	m_elbowMotor->Config_kP(0, 0.3, 0);
+	m_elbowMotor->Config_kI(0, 0.0, 0);
+    m_elbowMotor->Config_kD(0, 0.2, 0);
+}
 float
 Arm::DeadZone(float input, float range) {
     if (abs(input) < range) {
@@ -172,4 +185,7 @@ Arm::printVoltage(Joystick *bbb)
     SmartDashboard::PutNumber("Elbow current", m_elbowMotor->GetOutputCurrent());
     //min:.125 max:.8
     SmartDashboard::PutNumber("Turret current", m_turretMotor->GetOutputCurrent());
+    SmartDashboard::PutNumber("Elbow position", m_elbowMotor->GetSelectedSensorPosition(0));
+    SmartDashboard::PutNumber("Elbow close loop error",
+        m_elbowMotor->GetClosedLoopError(0));
 }
