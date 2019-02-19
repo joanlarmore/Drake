@@ -36,7 +36,7 @@ Arm::DeadZone(float input, float range) {
 
 void Arm::Tick(XboxController *xbox, POVButton *dPad[])
 {
-    m_turretMotor->Set(DeadZone(xbox->GetX(GenericHID::JoystickHand::kRightHand), .15) * .5);
+    // m_turretMotor->Set(DeadZone(xbox->GetX(GenericHID::JoystickHand::kRightHand), .3) * .5);
     float x = 0;
     float y = 0;
     bool move = true;
@@ -94,19 +94,16 @@ void Arm::Tick(XboxController *xbox, POVButton *dPad[])
         } else {
             x += xShift;
             y += yShift;
+            // moveToPosition(x, y);
         }
     }
-    if (move) {
-        moveToPosition(x, y);
-    }
-    cout << m_shoulderPot->Get() << "\n";
-    // if (xbox->GetAButton()) {
-    //     shoulderAngle = M_PI / 2;
-    // } else if (xbox->GetBButton()) {
-    //     shoulderAngle = 2 * M_PI / 3;
-    // }
+    // m_shoulderMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .3) * .3);
+    // cout << m_shoulderPot->Get() << "\n";
+    // m_elbowMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kRightHand), .1) * .35);
+
+    m_turretMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .3) * .6);
+
     // SetMotors();
-    // ha ha ha ha ha h a
 }
 
 void
@@ -118,9 +115,9 @@ Arm::moveToPosition(float x, float y)
         elbowAngle = ang2;
         curX = x;
         curY = y;
-        // std::cout << "MOVING TO: x = " << x << ", y = " << y << ", ang1 = " << ang1 << ", ang2 = " << ang2 << "\n";
+        std::cout << "MOVING TO: x = " << x << ", y = " << y << ", ang1 = " << ang1 << ", ang2 = " << ang2 << "\n";
     } else {
-        // std::cout << "INVALID ANGLE: x = " << x << ", y = " << y << ", ang1 = " << ang1 << ", ang2 = " << ang2 << "\n";
+        std::cout << "INVALID ANGLE: x = " << x << ", y = " << y << ", ang1 = " << ang1 << ", ang2 = " << ang2 << "\n";
     }
 }
 
@@ -128,28 +125,28 @@ Arm::moveToPosition(float x, float y)
 void
 Arm::SetMotors() {
     // set the position the potentiometer should be at in the PID closed loop of the elbow Talon (second parameter is a voltage 0-3.3 i think)
-    elbowAngle = M_PI / 2;
-    m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, -.553446 * elbowAngle + 2.38284);
+    shoulderAngle = M_PI / 2;
+    elbowAngle = 3* M_PI / 4;
+    m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, (elbowAngle * -0.543281 + 2.22394)); // <- black robot stuff
+    
     // set the shoulder speed
-    // the shoulder elbow might me inverted
-    // if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .01) { // .1 is a placeholder for how close the motor can get at full power
-    //     if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
-    //         m_shoulderMotor->Set(-1); // too fast?
-    //     } else {
-    //         m_shoulderMotor->Set(1); // same
-    //     }
-    // } else {
-    //     if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .0005) { // .01 is a placeholder for how close to let the motor get without any extra adjustment
-    //         if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
-    //             m_shoulderMotor->Set(-.1); // this is a guess
-    //         } else {
-    //             m_shoulderMotor->Set(.1); // also a guess
-    //         }
-    //     } else {
-    //         m_shoulderMotor->Set(0);
-    //     }
-    // }
-    cout << "shoulderAngle: " << shoulderAngle << "\n" << m_shoulderPot->Get() << "\n" << (shoulderAngle + 1.57331) / 6.0863 << "\n";
+    if (abs(m_shoulderPot->Get() - (shoulderAngle * 0.163044 + 0.142698)) > .01) { // .1 is a placeholder for how close the motor can get at full power
+        if (m_shoulderPot->Get() > (shoulderAngle * 0.163044 + 0.142698)) {
+            m_shoulderMotor->Set(-1); // too fast?
+        } else {
+            m_shoulderMotor->Set(1); // same
+        }
+    } else {
+        if (abs(m_shoulderPot->Get() - (shoulderAngle * 0.163044 + 0.142698)) > .001) { // .01 is a placeholder for how close to let the motor get without any extra adjustment
+            if (m_shoulderPot->Get() > (shoulderAngle * 0.163044 + 0.142698)) {
+                m_shoulderMotor->Set(-.1); // this is a guess
+            } else {
+                m_shoulderMotor->Set(.1); // also a guess
+            }
+        } else {
+            m_shoulderMotor->Set(0);
+        }
+    }
 }
 
 // this function takes in the x distance from the target (starting from the edge of the drive train), and the y from the ground

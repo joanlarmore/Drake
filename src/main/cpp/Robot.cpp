@@ -53,7 +53,7 @@ Robot::TeleopPeriodic()
 {
     m_drive->Cartesian(*m_leftStick, 0.0);
     m_claw->Tick(m_xbox);
-    m_arm->Tick(m_xbox, m_dPad);
+    m_arm->                Tick(m_xbox, m_dPad);
 
     //Motor Voltage values
     m_arm->printVoltage(m_leftStick);
@@ -63,6 +63,7 @@ Robot::TeleopPeriodic()
 void
 Robot::TestPeriodic()
 {
+    
 }
 
 #ifndef RUNNING_FRC_TESTS
