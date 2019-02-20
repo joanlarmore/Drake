@@ -24,24 +24,23 @@ Robot::RobotInit()
     m_dPad[L]    = new frc::POVButton(*m_xbox, 180);
     m_dPad[B]    = new frc::POVButton(*m_xbox, 270);
 
-/*
+
     microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::CONTINUOUS_MEASURE_MODE);
-    //for (int i = 0; i < LIDAR_COUNT; i++)
-    //    microLidar->Add(i);
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < LIDAR_COUNT; i++) {
         microLidar->Add(i);
     }
     microLidar->InitSensors();
+    microLidar->StartMeasurements();
     lineSensor = new LineSensor();
     dalekShuffleboard = new DalekShuffleboard(microLidar, lineSensor);
-*/
+
 }
 
 void
 Robot::RobotPeriodic() 
 {
-  //  microLidar->PollDevices();
- //   dalekShuffleboard->continious();
+   microLidar->PollDevices();
+   dalekShuffleboard->continious();
 }
 
 void
