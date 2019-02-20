@@ -24,13 +24,24 @@ Robot::RobotInit()
     m_dPad[L]    = new frc::POVButton(*m_xbox, 180);
     m_dPad[B]    = new frc::POVButton(*m_xbox, 270);
 
-    m_arm = new Arm(SHOULDER_MOTOR, ELBOW_MOTOR, TURRET_MOTOR, 0);
-    m_claw = new Claw(CLAW_MOTOR, 0);
+/*
+    microLidar = new MicroLidar("/dev/i2c-2", MicroLidar::CONTINUOUS_MEASURE_MODE);
+    //for (int i = 0; i < LIDAR_COUNT; i++)
+    //    microLidar->Add(i);
+    for (int i = 0; i < 1; i++) {
+        microLidar->Add(i);
+    }
+    microLidar->InitSensors();
+    lineSensor = new LineSensor();
+    dalekShuffleboard = new DalekShuffleboard(microLidar, lineSensor);
+*/
 }
 
 void
 Robot::RobotPeriodic() 
 {
+  //  microLidar->PollDevices();
+ //   dalekShuffleboard->continious();
 }
 
 void
@@ -53,7 +64,7 @@ Robot::TeleopPeriodic()
 {
     m_drive->Cartesian(*m_leftStick, 0.0);
     m_claw->Tick(m_xbox);
-    m_arm->                Tick(m_xbox, m_dPad);
+    m_arm->Tick(m_xbox, m_dPad);
 
     //Motor Voltage values
     m_arm->printVoltage(m_leftStick);
@@ -63,7 +74,7 @@ Robot::TeleopPeriodic()
 void
 Robot::TestPeriodic()
 {
-    
+
 }
 
 #ifndef RUNNING_FRC_TESTS

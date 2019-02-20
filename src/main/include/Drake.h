@@ -21,6 +21,10 @@
 #include "DalekDrive.h"
 #include "Arm.h"
 #include "Claw.h"
+#include "MicroLidar.h"
+#include "DalekShuffleboard.h"
+#include "LineSensor.h"
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -43,4 +47,7 @@ class Robot : public frc::TimedRobot {
   frc::Joystick *m_rightStick;
   frc::XboxController *m_xbox;
   frc::POVButton *m_dPad[4];
+  MicroLidar *microLidar;
+  LineSensor *lineSensor;
+  DalekShuffleboard *dalekShuffleboard;
 };
