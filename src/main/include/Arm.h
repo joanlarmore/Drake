@@ -10,7 +10,7 @@
 #include <frc/buttons/POVButton.h>
 #include <frc/XboxController.h>
 
-#include <Joystick.h>
+#include <frc/Joystick.h>
 
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc/smartdashboard/SmartDashBoard.h"
@@ -64,6 +64,7 @@ class Arm {
     AnalogPotentiometer *m_shoulderPot;
 
     void SetMotors();
+    void ArmInit();
     bool FindArmAngles(float x, float y, float *ang1, float *ang2);
     // void FindArmMinMax(float base, float *elbowMin, float *elbowMax);
     float DeadZone(float input, float range);

@@ -10,8 +10,6 @@
  */
 #pragma once
 
-
-
 #define CAN_TIMEOUT 100
 #define STALL_LIMIT 60
 #define FREE_LIMIT  2
