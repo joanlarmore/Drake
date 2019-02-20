@@ -12,15 +12,13 @@
 #include <frc/WPILib.h>
 #include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
-#include <frc/XboxController.h>
-#include <frc/buttons/POVButton.h>
-#include <frc/Servo.h>
-#include <frc/AnalogPotentiometer.h>
-#include <frc/smartdashboard/SendableChooser.h>
-#include "frc/smartdashboard/SmartDashBoard.h"
 #include "DalekDrive.h"
 #include "Arm.h"
 #include "Claw.h"
+#include "MicroLidar.h"
+#include "DalekShuffleboard.h"
+#include "LineSensor.h"
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -43,4 +41,7 @@ class Robot : public frc::TimedRobot {
   frc::Joystick *m_rightStick;
   frc::XboxController *m_xbox;
   frc::POVButton *m_dPad[4];
+  MicroLidar *microLidar;
+  LineSensor *lineSensor;
+  DalekShuffleboard *dalekShuffleboard;
 };

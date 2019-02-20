@@ -9,21 +9,35 @@ Arm::Arm(int shoulderMotor, int elbowMotor, int turretMotor, int shoulderPot)
     m_turretMotor          = new WPI_TalonSRX(turretMotor);
     m_shoulderPot          = new AnalogPotentiometer(shoulderPot, 1.0, 0.0);
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    ArmInit();
     curX = 0;
     curY = 0;
+    shoulderAngle = M_PI / 2;
 }
 
-Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, Potentiometer *shoulderPot)
+Arm::Arm(CANSparkMax *shoulderMotor, WPI_TalonSRX *elbowMotor, WPI_TalonSRX *turretMotor, AnalogPotentiometer *shoulderPot)
 {
     m_shoulderMotor        = shoulderMotor;
     m_elbowMotor           = elbowMotor;
     m_turretMotor          = turretMotor;
     m_shoulderPot          = shoulderPot;
     m_shoulderMotorEncoder = new CANEncoder(*m_shoulderMotor);
+    ArmInit();
     curX = 0;
     curY = 0;
 }
 
+void
+Arm::ArmInit()
+{
+    // needed to configure the talon to make sure things are ready for position mode
+    m_elbowMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::Analog, 0, 0);
+    m_elbowMotor->SetSensorPhase(true);
+    m_elbowMotor->Config_kF(0, 0.0, 0);
+	m_elbowMotor->Config_kP(0, 0.3, 0);
+	m_elbowMotor->Config_kI(0, 0.0, 0);
+    m_elbowMotor->Config_kD(0, 0.2, 0);
+}
 float
 Arm::DeadZone(float input, float range) {
     if (abs(input) < range) {
@@ -35,7 +49,7 @@ Arm::DeadZone(float input, float range) {
 
 void Arm::Tick(XboxController *xbox, POVButton *dPad[])
 {
-    m_turretMotor->Set(DeadZone(xbox->GetX(GenericHID::JoystickHand::kRightHand), .15) * .5);
+    // m_turretMotor->Set(DeadZone(xbox->GetX(GenericHID::JoystickHand::kRightHand), .3) * .5);
     float x = 0;
     float y = 0;
     bool move = true;
@@ -86,19 +100,23 @@ void Arm::Tick(XboxController *xbox, POVButton *dPad[])
     } else if (xbox->GetTriggerAxis(GenericHID::JoystickHand::kRightHand) > .1) {
         // FETAL POSITION
     } else {
-        float xShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kRightHand), .15) * .5; // .5 is a guess... fix in testing
-        float yShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .15) * .5;  // same as above
+        float xShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kRightHand), .4) * .5; // .5 is a guess... fix in testing
+        float yShift = DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .4) * .5;  // same as above
         if (xShift == 0 && yShift == 0) {
             move = false;
         } else {
             x += xShift;
             y += yShift;
+            // moveToPosition(x, y);
         }
     }
-    if (move) {
-        moveToPosition(x, y);
-    }
-    SetMotors();
+    // m_shoulderMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .3) * .3);
+    // cout << m_shoulderPot->Get() << "\n";
+    // m_elbowMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kRightHand), .1) * .35);
+
+    m_turretMotor->Set(DeadZone(xbox->GetY(GenericHID::JoystickHand::kLeftHand), .3) * .6);
+
+    // SetMotors();
 }
 
 void
@@ -120,18 +138,20 @@ Arm::moveToPosition(float x, float y)
 void
 Arm::SetMotors() {
     // set the position the potentiometer should be at in the PID closed loop of the elbow Talon (second parameter is a voltage 0-3.3 i think)
-    m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, -.553446 * elbowAngle + 2.38284);
-
-    // set the shoulder speed    
-    if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .1) { // .1 is a placeholder for how close the motor can get at full power
-        if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
+    shoulderAngle = M_PI / 2;
+    elbowAngle = 3* M_PI / 4;
+    m_elbowMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, (elbowAngle * -0.543281 + 2.22394)); // <- black robot stuff
+    
+    // set the shoulder speed
+    if (abs(m_shoulderPot->Get() - (shoulderAngle * 0.163044 + 0.142698)) > .01) { // .1 is a placeholder for how close the motor can get at full power
+        if (m_shoulderPot->Get() > (shoulderAngle * 0.163044 + 0.142698)) {
             m_shoulderMotor->Set(-1); // too fast?
         } else {
             m_shoulderMotor->Set(1); // same
         }
     } else {
-        if (abs(m_shoulderPot->Get() - (shoulderAngle + 1.57331) / 6.0863) > .01) { // .01 is a placeholder for how close to let the motor get without any extra adjustment
-            if (m_shoulderPot->Get() > (shoulderAngle + 1.57331) / 6.0863) {
+        if (abs(m_shoulderPot->Get() - (shoulderAngle * 0.163044 + 0.142698)) > .001) { // .01 is a placeholder for how close to let the motor get without any extra adjustment
+            if (m_shoulderPot->Get() > (shoulderAngle * 0.163044 + 0.142698)) {
                 m_shoulderMotor->Set(-.1); // this is a guess
             } else {
                 m_shoulderMotor->Set(.1); // also a guess
@@ -172,4 +192,7 @@ Arm::printVoltage(Joystick *bbb)
     SmartDashboard::PutNumber("Elbow current", m_elbowMotor->GetOutputCurrent());
     //min:.125 max:.8
     SmartDashboard::PutNumber("Turret current", m_turretMotor->GetOutputCurrent());
+    SmartDashboard::PutNumber("Elbow position", m_elbowMotor->GetSelectedSensorPosition(0));
+    SmartDashboard::PutNumber("Elbow close loop error",
+        m_elbowMotor->GetClosedLoopError(0));
 }
